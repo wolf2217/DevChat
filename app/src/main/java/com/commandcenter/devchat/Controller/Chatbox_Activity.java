@@ -10,6 +10,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.EditText;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
 import com.commandcenter.devchat.Adapter.FirebaseMessageAdapter;
 import com.commandcenter.devchat.Model.ChatboxMessage;
@@ -61,6 +66,9 @@ public class Chatbox_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatbox);
+        //Notification
+        notification = new NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
 
         mDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -152,6 +160,18 @@ public class Chatbox_Activity extends AppCompatActivity {
     }
 
     private void processMessage(String user, ChatboxMessage message) {
+        
+        //Notification
+        notification.setSmallIcon(R.drawable.ic_person);
+        notification.setTicker("New DevChat Message");
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("This is the title");
+        notification.setContentText("You have a new message on DevChat");
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setContentIntent(pendingIntent);
+        //End Notification
 
         String messageCur = message.getChatMessage();
         if (messageCur.startsWith("~")) {
