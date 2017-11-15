@@ -75,6 +75,7 @@ public class Chatbox_Activity extends AppCompatActivity {
     private String rank;
     private String status;
     private String chatStatus;
+    private String isTyping = "";
 
     private String curDate;
     private String time;
@@ -213,6 +214,54 @@ public class Chatbox_Activity extends AppCompatActivity {
         userList = new ArrayList<>();
 
     }
+    
+    //Create the value listener for incoming messages
+    mIncomingMsg.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mIncomingMsg = mDatabase.getReference().child("Typing");
+
+                isTyping = dataSnapshot.getValue().toString();
+
+                if (isTyping.equalsIgnoreCase("True")){
+                    incoming_msg.setText("Someone Is Typing...");
+                }else{
+                    incoming_msg.setText("");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    //End value listener
+    
+    //Create message textChanged event listener
+    et_message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!TextUtils.isEmpty(et_message.getText())){
+                    mIncomingMsg.setValue("True");
+                    mIncomingMsg.setValue("True");
+                    incoming_msg.setText("Someone Is Typing");
+                }else{
+                    mIncomingMsg.setValue("False");
+                    incoming_msg.setText("");
+                }
+            }
+        });
+    //End textChange event listener
 
     //get current user
     private String getUser() {
