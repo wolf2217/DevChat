@@ -24,6 +24,7 @@ public class ActivityRegister extends AppCompatActivity {
 
     EditText et_email, et_password, et_username;
     Button btn_register, btn_cancel;
+    EditText et_gender;
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -45,6 +46,7 @@ public class ActivityRegister extends AppCompatActivity {
         et_email     = findViewById(R.id.register_et_email);
         et_password  = findViewById(R.id.register_et_password);
         et_username  = findViewById(R.id.register_et_username);
+        et_gender = findViewById(R.id.register_et_gender);
         btn_cancel   = findViewById(R.id.register_btnCancel);
         btn_register = findViewById(R.id.register_btnRegister);
 
@@ -55,10 +57,12 @@ public class ActivityRegister extends AppCompatActivity {
             values = intent.getStringArrayExtra("details");
             et_email.setText(values[0]);
             et_password.setText(values[1]);
+
         }else {
             values[0] = et_email.getText().toString();
             values[1] = et_password.getText().toString();
             values[2] = et_username.getText().toString();
+
         }
 
         btn_register.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +106,7 @@ public class ActivityRegister extends AppCompatActivity {
         }else {
             FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
             String userID = current_user.getUid();
-            User user = new User(et_username.getText().toString(), "Newbie", "Online", "Active", userID);
+            User user = new User(et_username.getText().toString(), et_gender.getText().toString(), "Newbie", "Online", "Active", userID);
             mRef.child(mAuth.getCurrentUser().getUid()).setValue(user);
         }
     }
