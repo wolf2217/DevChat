@@ -54,6 +54,14 @@ public class FirebaseMessageAdapter extends RecyclerView.Adapter<FirebaseMessage
         holder.tv_username.setText(message.getUser());
         holder.tv_rank.setText(message.getRank());
         holder.getImageView().setImageResource(R.drawable.ic_person);
+        if (message.getRank().equalsIgnoreCase("Admin")) {
+            holder.card.setCardBackgroundColor(Color.parseColor("#DBA120"));
+            holder.tv_rank.setTextColor(Color.parseColor("#4F3A0C"));
+            holder.tv_username.setTextColor(Color.WHITE);
+            holder.tv_message.setTextColor(Color.parseColor("#B55106"));
+            holder.getImageView().setImageResource(R.drawable.ic_face_black_24dp);
+
+        }
 
     }
 
