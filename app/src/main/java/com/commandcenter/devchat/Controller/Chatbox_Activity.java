@@ -71,6 +71,7 @@ public class Chatbox_Activity extends AppCompatActivity {
 
     private String curDate;
     private String time;
+    private String isTyping = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +209,50 @@ public class Chatbox_Activity extends AppCompatActivity {
         incoming_msg = (TextView) findViewById(R.id.chatbox_incoming);
         messageList = new ArrayList<>();
         userList = new ArrayList<>();
+        
+        mIncomingMsg.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mIncomingMsg = mDatabase.getReference().child("Typing");
+
+                isTyping = dataSnapshot.getValue().toString();
+
+                if (isTyping.equalsIgnoreCase("True")){
+                    incoming_msg.setText("Someone Is Typing...");
+                }else{
+                    incoming_msg.setText("");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        et_message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!TextUtils.isEmpty(et_message.getText())){
+                    mIncomingMsg.setValue("True");
+                    mIncomingMsg.setValue("True");
+                    incoming_msg.setText("Someone Is Typing");
+                }else{
+                    mIncomingMsg.setValue("False");
+                    incoming_msg.setText("");
+                }
+            }
+        });
 
     }
 
